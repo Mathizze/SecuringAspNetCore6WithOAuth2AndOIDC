@@ -12,7 +12,10 @@ public static class Config
             new IdentityResources.Profile(),
             new IdentityResource("roles",
                 "Your role(s)",
-                new [] { "role" })
+                new [] { "role" }),
+            new IdentityResource("country",
+                "The country you're living in",
+                new List<string>() { "country" })
         };
 
     public static IEnumerable<ApiResource> ApiResources =>
@@ -21,16 +24,20 @@ public static class Config
                 new ApiResource(
                     "imagegalleryapi",
                     "Image Gallery API",
-                    new [] { "role" })
+                    new [] { "role", "country" }) // hier werkt er nog iets niet, die country zit niet in het access token
                 {
-                    Scopes = { "imagegalleryapi.fullaccess" }
+                    Scopes = { "imagegalleryapi.fullaccess",
+                        "imagegalleryapi.read",
+                        "imagegalleryapi.write" }
                 }
             };
 
     public static IEnumerable<ApiScope> ApiScopes =>
         new ApiScope[]
             {
-                new ApiScope("imagegalleryapi.fullaccess")
+                new ApiScope("imagegalleryapi.fullaccess"),
+                new ApiScope("imagegalleryapi.read"),
+                new ApiScope("imagegalleryapi.write"),
             };
 
     public static IEnumerable<Client> Clients =>
@@ -54,7 +61,10 @@ public static class Config
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         "roles",
-                        "imagegalleryapi.fullaccess"
+                        //"imagegalleryapi.fullaccess",
+                        "imagegalleryapi.read",
+                        "imagegalleryapi.write",
+                        "country"
                     },
                     ClientSecrets =
                     {
